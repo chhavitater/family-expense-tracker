@@ -32,23 +32,25 @@ function App() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <input
+      <form className="flex flex-col gap-2 p-4 max-w-sm" onSubmit={handleSubmit}>
+        <input className="border rounded px-3 py-2" 
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         
-        <input
+        <input className="border rounded px-3 py-2"
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-        {error && <p className="error">{error}</p>}
-        <button type="submit">Add Expense</button>
+        {error && <p className="text-red-500">{error}</p>}
+        <button className="bg-blue-500 text-white font-bold py-2 rounded" type="submit">Add Expense</button>
       </form>
-      {expenses.map((expense, index) => (
-        <ExpenseItem key={index} description={expense.description} amount={expense.amount} />
-      ))}
+      <div className="max-w-sm">
+        {expenses.map((expense, index) => (
+          <ExpenseItem key={index} description={expense.description} amount={expense.amount} />
+        ))}
+      </div> 
     </>
   )
 }
@@ -60,5 +62,10 @@ interface ExpenseItemProps {
   amount: number;
 }
 function ExpenseItem({ description, amount}: ExpenseItemProps) {
-  return <p>{description} - ${amount}</p>;
+  return(
+    <p className="flex justify-between p-3 border-b">
+      <span>{description}</span>
+      <span className="font-bold">${amount}</span>
+    </p>
+  );
 }

@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import './App.css'
 
 interface Expense {
@@ -33,18 +35,18 @@ function App() {
   return (
     <>
       <form className="flex flex-col gap-2 p-4 max-w-sm" onSubmit={handleSubmit}>
-        <input className="border rounded px-3 py-2" 
+        <Input 
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         
-        <input className="border rounded px-3 py-2"
+        <Input 
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
         {error && <p className="text-red-500">{error}</p>}
-        <button className="bg-blue-500 text-white font-bold py-2 rounded" type="submit">Add Expense</button>
+        <Button type="submit">Add Expense</Button>
       </form>
       <div className="max-w-sm">
         {expenses.map((expense, index) => (

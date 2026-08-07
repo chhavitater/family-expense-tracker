@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import './App.css'
@@ -13,6 +13,23 @@ function App() {
   const [description, setDescription] = useState("");
   const[amount, setAmount] = useState("");
   const[error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
+
+  useEffect(() => {
+    async function loadExpenses(){
+      try {
+        const response = await fetch('http://localhost:3000/expenses');
+        const data =  await response.json();
+        setExpenses(data);
+      } catch (err) {
+        setFetchError("Failed to load expenses.");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadExpenses();   
+  }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
@@ -48,11 +65,15 @@ function App() {
         {error && <p className="text-red-500">{error}</p>}
         <Button type="submit">Add Expense</Button>
       </form>
-      <div className="max-w-sm">
-        {expenses.map((expense, index) => (
-          <ExpenseItem key={index} description={expense.description} amount={expense.amount} />
-        ))}
-      </div> 
+      {loading && <p>Loading...</p>}
+      {fetchError && <p className="text-red-500">{fetchError}</p>}
+      {!loading && !fetchError && (
+        <div className="max-w-sm">
+          {expenses.map((expense, index) => (
+            <ExpenseItem key={index} description={expense.description} amount={expense.amount} />
+          ))}
+        </div>
+      )}
     </>
   )
 }
